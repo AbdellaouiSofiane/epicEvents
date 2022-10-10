@@ -4,6 +4,9 @@ from .models import Customer, Contract, Event
 
 class CustomerSerializer(serializers.ModelSerializer):
 
+    sales_contact = serializers.CharField(
+        source='sales_contact.username', read_only=True)
+
     class Meta:
         model = Customer
         fields = ('__all__')
@@ -11,12 +14,24 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class ContractSerializer(serializers.ModelSerializer):
 
+    sales_contact = serializers.CharField(
+        source='sales_contact.username', read_only=True)
+
+    customer = serializers.CharField(
+        source='customer.full_name', read_only=True)
+
     class Meta:
         model = Contract
         fields = ('__all__')
 
 
 class EventSerializer(serializers.ModelSerializer):
+
+    support_contact = serializers.CharField(
+        source='support_contact.username', read_only=True)
+
+    customer = serializers.CharField(
+        source='customer.full_name', read_only=True)
 
     class Meta:
         model = Event
