@@ -23,6 +23,10 @@ class Customer(TimeStamped):
     def __str__(self):
         return f"Customer: {self.first_name} {self.last_name}"
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Contract(TimeStamped):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -37,7 +41,8 @@ class Contract(TimeStamped):
 
 
 class Event(TimeStamped):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name='events')
     event_status = models.ForeignKey(Contract, on_delete=models.CASCADE)
     attendees = models.IntegerField()
     event_date = models.DateTimeField()
