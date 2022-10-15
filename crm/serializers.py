@@ -3,7 +3,6 @@ from .models import Customer, Contract, Event
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-
     sales_contact = serializers.CharField(
         source='sales_contact.username', read_only=True)
 
@@ -13,12 +12,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class ContractSerializer(serializers.ModelSerializer):
-
     sales_contact = serializers.CharField(
         source='sales_contact.username', read_only=True)
-
-    customer = serializers.CharField(
-        source='customer.full_name', read_only=True)
 
     class Meta:
         model = Contract
@@ -26,12 +21,8 @@ class ContractSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-
     support_contact = serializers.CharField(
         source='support_contact.username', read_only=True)
-
-    customer = serializers.CharField(
-        source='customer.full_name', read_only=True)
 
     class Meta:
         model = Event
