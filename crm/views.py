@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import ValidationError
 
+from .filters import ContractFilter, EventFilter
 from .models import Customer, Contract, Event
 from .permissions import IsInchargeOrReadOnly
 from .serializers import CustomerSerializer, ContractSerializer, EventSerializer
@@ -23,8 +24,8 @@ class BaseViewSet(viewsets.ModelViewSet):
 
 
 class CustomerViewSet(BaseViewSet):
-    permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
     serializer_class = CustomerSerializer
+    filterset_fields = ('last_name', 'email')
 
     def get_queryset(self):
         return Customer.objects.filter(
@@ -34,8 +35,8 @@ class CustomerViewSet(BaseViewSet):
 
 
 class ContractViewSet(BaseViewSet):
-    permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
     serializer_class = ContractSerializer
+    filterset_class = ContractFilter
 
     def get_queryset(self):
         return Contract.objects.filter(
@@ -46,6 +47,7 @@ class ContractViewSet(BaseViewSet):
 
 class EventViewSet(BaseViewSet):
     serializer_class = EventSerializer
+    filterset_class = EventFilter
 
     def get_queryset(self):
         return Event.objects.filter(
