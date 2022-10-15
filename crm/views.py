@@ -1,13 +1,28 @@
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.serializers import ValidationError
 
 from .models import Customer, Contract, Event
 from .permissions import IsInchargeOrReadOnly
 from .serializers import CustomerSerializer, ContractSerializer, EventSerializer
 
 
-class CustomerViewSet(viewsets.ModelViewSet):
+class BaseViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
+    http_method_names = ['get', 'post', 'put', 'patch', 'head', 'options', 'trace'] # No Delete
+
+    def perform_create(self, serializer):
+        if not self.request.user.groups.filter(
+            name='sales employees'
+        ).exists():
+            raise ValidationError(
+                'You are not permitted to create a customer'
+            )
+        super().perform_create(serializer)
+
+
+class CustomerViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
     serializer_class = CustomerSerializer
 
@@ -18,7 +33,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         ).distinct().select_related('sales_contact')
 
 
-class ContractViewSet(viewsets.ModelViewSet):
+class ContractViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
     serializer_class = ContractSerializer
 
@@ -29,8 +44,7 @@ class ContractViewSet(viewsets.ModelViewSet):
         ).distinct().select_related('sales_contact')
 
 
-class EventViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsInchargeOrReadOnly]
+class EventViewSet(BaseViewSet):
     serializer_class = EventSerializer
 
     def get_queryset(self):
