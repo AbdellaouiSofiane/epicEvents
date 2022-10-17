@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -31,7 +32,7 @@ class Customer(TimeStamped):
 class Contract(TimeStamped):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
-    amount = models.FloatField()
+    amount = models.FloatField(validators=[MinValueValidator(0.0)])
     payment_due = models.DateTimeField()
     sales_contact = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
