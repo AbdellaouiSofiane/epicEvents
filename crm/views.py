@@ -40,3 +40,13 @@ class EventViewSet(BaseViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     filterset_class = EventFilter
+
+    def perform_create(self, serializer):
+        related_contract = Contract.objects.filter(
+            pk=serializer.data.get('event_status'))
+        if (related_contract.exists()
+            and not related_contract.get().status):
+            raise ValidationError(
+                'You are not permitted to create an event for an unsigned contract'
+            )
+        super().perform_create(serializer)
