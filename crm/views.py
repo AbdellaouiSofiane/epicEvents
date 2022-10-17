@@ -24,33 +24,19 @@ class BaseViewSet(viewsets.ModelViewSet):
 
 
 class CustomerViewSet(BaseViewSet):
+    queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filterset_fields = ('last_name', 'email')
 
-    def get_queryset(self):
-        return Customer.objects.filter(
-            Q(sales_contact=self.request.user) |
-            Q(events__support_contact=self.request.user)
-        ).distinct().select_related('sales_contact')
-
 
 class ContractViewSet(BaseViewSet):
+    queryset = Contract.objects.all()
     serializer_class = ContractSerializer
     filterset_class = ContractFilter
 
-    def get_queryset(self):
-        return Contract.objects.filter(
-            Q(sales_contact=self.request.user) |
-            Q(customer__events__support_contact=self.request.user)
-        ).distinct().select_related('sales_contact')
 
 
 class EventViewSet(BaseViewSet):
+    queryset = Event.objects.all()
     serializer_class = EventSerializer
     filterset_class = EventFilter
-
-    def get_queryset(self):
-        return Event.objects.filter(
-            Q(support_contact=self.request.user) |
-            Q(customer__sales_contact=self.request.user)
-        ).distinct().select_related('support_contact', 'customer__sales_contact')
