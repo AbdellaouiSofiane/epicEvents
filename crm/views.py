@@ -34,6 +34,15 @@ class ContractViewSet(BaseViewSet):
     serializer_class = ContractSerializer
     filterset_class = ContractFilter
 
+    def perform_create(self, serializer):
+        related_customer = Customer.objects.filter(
+            pk=serializer.data.get('customer'))
+        if (related_customer.exists()
+            and related_customer.get().prospect):
+            raise ValidationError(
+                'Prospects are not allowed to have contracts'
+            )
+        super().perform_create(serializer)
 
 
 class EventViewSet(BaseViewSet):
