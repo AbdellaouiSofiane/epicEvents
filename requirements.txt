@@ -2,3 +2,4 @@ django==3.2.15
 psycopg2==2.9.3
 djangorestframework==3.14.0
 django-filter==22.1
+djangorestframework-simplejwt==5.2.1
