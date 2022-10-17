@@ -18,6 +18,7 @@ class Customer(TimeStamped):
     phone = models.CharField(max_length=128)
     mobile = models.CharField(max_length=128)
     company_name = models.CharField(max_length=128)
+    prospect = models.BooleanField(default=True)
     sales_contact = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
