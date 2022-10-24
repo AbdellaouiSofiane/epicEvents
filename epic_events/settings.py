@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'epic_events.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'epic_events_dev',
+        'NAME': 'epic_events',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -143,6 +144,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1)
 }
 
 LOGGING = {
