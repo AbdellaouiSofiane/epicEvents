@@ -31,3 +31,7 @@ Navigate to the project directory and type :
 ## Usage
 
 Create a postgresSql database and update DATABASE config in settings.py
+
+## API documentation
+
+https://documenter.getpostman.com/view/21547416/2s8YRgqufR
